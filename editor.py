@@ -11,18 +11,7 @@ def ask_text_level() -> str:
 
 
 def format_text_by_level(_text_level: int, _user_text: str) -> str:
-    if _text_level == 1:
-        return f'# {_user_text}'
-    if _text_level == 2:
-        return f'## {_user_text}'
-    if _text_level == 3:
-        return f'### {_user_text}'
-    if _text_level == 4:
-        return f'#### {_user_text}'
-    if _text_level == 5:
-        return f'##### {_user_text}'
-    if _text_level == 6:
-        return f'###### {_user_text}'
+    return ' '.join(['#' * _text_level, _user_text])
 
 
 def format_text(_user_text: str, _correct_formatters: list, _formatter: str) -> str:
@@ -61,6 +50,14 @@ def ask_user_for_url() -> str:
 
 def link_text(_user_label: str, _user_url: str, _saved_formatted_texts: str) -> str:
     return f'{_saved_formatted_texts}[{_user_label}]({_user_url})'
+
+
+def ask_user_for_rows() -> str:
+    return input('Number of rows:').strip()
+
+
+def ask_text_for_rows(_rows: int, _count: int) -> str:
+    return input(f'Row #{_count}:')
 
 
 correct_formatters = ['plain', 'bold', 'italic', 'header', 'link', 'inline-code', 'ordered-list', 'unordered-list', 'new-line']
@@ -111,9 +108,35 @@ while True:
                 result = format_text_by_level(text_level, user_text)
                 print(result, '\n')
                 hello = result
+
                 break
+
             else:
                 print('The level should be within the range of 1 to 6')
+    if formatter == correct_formatters[6] or formatter == correct_formatters[7]:
+        while True:
+            rows = int(ask_user_for_rows())
+            if rows > 0:
+                count = 1
+                mark = '*'
+                result_list = ''
+                result_ord_lst = []
+                for elem in range(1, int(rows) + 1):
+                    row_text = ask_text_for_rows(int(rows), count).strip()
+                    if formatter == correct_formatters[6]:
+                        result_ord_lst.append(f'{count}. {row_text}')
+                    else:
+                        result_ord_lst.append(f'{mark} {row_text}')
+                    count += 1
+                result_list = '\n'.join(result_ord_lst)
+                print(formatted_text + result_list + '\n' if formatted_text == '' else formatted_text + '\n' + result_list + '\n')
+                formatted_text = result_list
+
+                break
+
+            else:
+                print('The number of rows should be greater than zero')
+
     if formatter == special_commands[0]:
         correct_formatters_string = ' '.join(correct_formatters)
         special_commands_string = ' '.join(special_commands)
