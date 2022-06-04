@@ -100,6 +100,8 @@ def add_formatted_text(_saved_text: str, _formatted_text: str, _user_formatter: 
 
 def append_special_commands(_user_formatter: str, _formatters_list: list, _special_commands: list) -> str:
     if _user_formatter == '!done':
+        with open('output.md', 'w') as output:
+            output.write(saved_text)
         exit()
     if _user_formatter == '!help':
         formatters_list_string = ' '.join(_formatters_list)
@@ -123,4 +125,3 @@ while True:
             saved_text = result
     else:
         print(formatter_correctness)
-
